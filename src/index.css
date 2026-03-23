@@ -1,0 +1,120 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root,
+[data-theme="light"] {
+  /* Universitaria Brand Colors */
+  --green-dark: #196A2A;
+  --green-primary: #1A9A60;
+  --gold: #EAAC24;
+  --yellow: #FFE610;
+  --brand-black: #1A1A1A;
+
+  /* Functional colors */
+  --accent: #1A9A60;
+  --accent-hover: #196A2A;
+  --accent-light: rgba(26, 154, 96, 0.08);
+  --accent-glow: rgba(26, 154, 96, 0.18);
+  --gold-accent: #EAAC24;
+  --gold-light: rgba(234, 172, 36, 0.12);
+  --danger: #DF1440;
+
+  /* Surfaces */
+  --sidebar-bg: #f7f8f6;
+  --chat-bg: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.88);
+  --surface: #ffffff;
+  --surface-elevated: #f9faf8;
+  --hover-bg: rgba(26, 154, 96, 0.05);
+  --active-bg: rgba(26, 154, 96, 0.10);
+  --border: #e2e5de;
+
+  /* Text */
+  --text-primary: #1A1A1A;
+  --text-secondary: #5a6155;
+  --text-tertiary: #8f968a;
+
+  /* User bubble */
+  --user-bubble: #1A9A60;
+  --user-bubble-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --green-dark: #22c55e;
+  --green-primary: #34d399;
+  --gold: #EAAC24;
+  --yellow: #FFE610;
+
+  --accent: #34d399;
+  --accent-hover: #22c55e;
+  --accent-light: rgba(52, 211, 153, 0.10);
+  --accent-glow: rgba(52, 211, 153, 0.20);
+  --gold-accent: #EAAC24;
+  --gold-light: rgba(234, 172, 36, 0.10);
+  --danger: #f87171;
+
+  --sidebar-bg: #0f1210;
+  --chat-bg: #141816;
+  --header-bg: rgba(20, 24, 22, 0.92);
+  --surface: #1c211e;
+  --surface-elevated: #232823;
+  --hover-bg: rgba(52, 211, 153, 0.06);
+  --active-bg: rgba(52, 211, 153, 0.12);
+  --border: #2a302c;
+
+  --text-primary: #eef1ec;
+  --text-secondary: #9ca396;
+  --text-tertiary: #636b5f;
+
+  --user-bubble: #196A2A;
+  --user-bubble-text: #ffffff;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--chat-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+}
+
+button {
+  font-family: inherit;
+}
+
+input, textarea {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}

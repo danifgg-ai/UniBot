@@ -1,0 +1,88 @@
+.uni-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.uni-logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Bot avatar for chat messages */
+.uni-bot-avatar {
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--green-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(26, 154, 96, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.uni-bot-avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Hero logo for welcome screen */
+.uni-bot-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: heroFloat 3s ease-in-out infinite;
+}
+
+.uni-bot-hero svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.uni-bot-hero__glow {
+  position: absolute;
+  inset: -15%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  animation: heroGlow 3s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+/* Gem glow pulse */
+.uni-logo__gem-glow {
+  animation: gemPulse 2.5s ease-in-out infinite;
+}
+
+/* Eye blink */
+.uni-logo__eye-left,
+.uni-logo__eye-right {
+  animation: blink 5s ease-in-out infinite;
+}
+
+.uni-logo__eye-right {
+  animation-delay: 0.1s;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes heroGlow {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  100% { opacity: 0.8; transform: scale(1.1); }
+}
+
+@keyframes gemPulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes blink {
+  0%, 44%, 48%, 100% { transform: scaleY(1); }
+  46% { transform: scaleY(0.1); }
+}
