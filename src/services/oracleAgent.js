@@ -1,6 +1,6 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
-export async function sendMessageToOracle(message, sessionId) {
+export async function sendMessageToOracle(message, sessionId, ociSessionId) {
   const response = await fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: {
@@ -9,6 +9,7 @@ export async function sendMessageToOracle(message, sessionId) {
     body: JSON.stringify({
       message,
       sessionId,
+      ociSessionId: ociSessionId || undefined,
     }),
   });
 
@@ -18,7 +19,7 @@ export async function sendMessageToOracle(message, sessionId) {
     throw new Error(data.error || `Error del servidor: ${response.status}`);
   }
 
-  return data.message;
+  return { message: data.message, ociSessionId: data.ociSessionId };
 }
 
 export async function checkHealth() {

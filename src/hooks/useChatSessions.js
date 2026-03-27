@@ -59,6 +59,12 @@ export function useChatSessions() {
     }));
   }, []);
 
+  const updateOciSessionId = useCallback((sessionId, ociSessionId) => {
+    setSessions(prev => prev.map(s =>
+      s.id === sessionId ? { ...s, ociSessionId } : s
+    ));
+  }, []);
+
   const clearAllSessions = useCallback(() => {
     setSessions([]);
     setActiveSessionId(null);
@@ -72,6 +78,7 @@ export function useChatSessions() {
     createSession,
     deleteSession,
     addMessage,
+    updateOciSessionId,
     clearAllSessions,
   };
 }

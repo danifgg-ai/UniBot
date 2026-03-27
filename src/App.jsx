@@ -18,6 +18,7 @@ function ChatApp() {
     createSession,
     deleteSession,
     addMessage,
+    updateOciSessionId,
     clearAllSessions,
   } = useChatSessions();
 
@@ -59,10 +60,20 @@ function ChatApp() {
     setIsLoading(true);
 
     try {
-      const response = await sendMessageToOracle(content, sessionId);
+      const currentSession = sessions.find(s => s.id === sessionId);
+      const { message, ociSessionId } = await sendMessageToOracle(
+        content,
+        sessionId,
+        currentSession?.ociSessionId,
+      );
+
+      if (ociSessionId) {
+        updateOciSessionId(sessionId, ociSessionId);
+      }
+
       const assistantMessage = {
         role: 'assistant',
-        content: response,
+        content: message,
         timestamp: new Date().toISOString(),
       };
       addMessage(sessionId, assistantMessage);
@@ -76,7 +87,7 @@ function ChatApp() {
     } finally {
       setIsLoading(false);
     }
-  }, [activeSessionId, createSession, addMessage]);
+  }, [activeSessionId, sessions, createSession, addMessage, updateOciSessionId]);
 
   const handleNewSession = () => {
     createSession();
