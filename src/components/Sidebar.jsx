@@ -1,5 +1,6 @@
-import { Plus, Trash2, MessageSquare, X } from 'lucide-react';
+import { Plus, Trash2, MessageSquare, X, Download } from 'lucide-react';
 import UniLogo from './UniLogo';
+import { exportChatToPdf } from '../services/exportPdf';
 import './Sidebar.css';
 
 export default function Sidebar({
@@ -46,8 +47,17 @@ export default function Sidebar({
             >
               <MessageSquare size={15} />
               <span className="sidebar__session-title">{session.title}</span>
+              {session.messages?.length > 0 && (
+                <button
+                  className="sidebar__action-btn sidebar__pdf-btn"
+                  onClick={e => { e.stopPropagation(); exportChatToPdf(session); }}
+                  title="Guardar como PDF"
+                >
+                  <Download size={14} />
+                </button>
+              )}
               <button
-                className="sidebar__delete-btn"
+                className="sidebar__action-btn sidebar__delete-btn"
                 onClick={e => { e.stopPropagation(); onDeleteSession(session.id); }}
                 title="Eliminar conversacion"
               >

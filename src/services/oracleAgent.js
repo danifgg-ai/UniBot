@@ -22,6 +22,22 @@ export async function sendMessageToOracle(message, sessionId, ociSessionId) {
   return { message: data.message, ociSessionId: data.ociSessionId };
 }
 
+export async function fetchGlobalConfig() {
+  const response = await fetch(`${API_BASE}/api/config`);
+  if (!response.ok) throw new Error('Error al cargar configuracion');
+  return response.json();
+}
+
+export async function saveGlobalConfig(config) {
+  const response = await fetch(`${API_BASE}/api/config`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(config),
+  });
+  if (!response.ok) throw new Error('Error al guardar configuracion');
+  return response.json();
+}
+
 export async function checkHealth() {
   try {
     const response = await fetch(`${API_BASE}/api/health`);

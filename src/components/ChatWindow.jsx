@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Menu, User, Sun, Moon, Copy, Check } from 'lucide-react';
+import { Send, Menu, User, Sun, Moon, Copy, Check, RotateCcw } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { UniBotAvatar, UniBotHero } from './UniLogo';
 import UniLogo from './UniLogo';
@@ -8,6 +8,7 @@ import './ChatWindow.css';
 export default function ChatWindow({
   session,
   onSendMessage,
+  onClearChat,
   isLoading,
   onToggleSidebar,
   suggestedQuestions,
@@ -89,8 +90,17 @@ export default function ChatWindow({
           {session ? session.title : 'UniBot'}
         </h1>
       </div>
+      {session?.messages?.length > 0 && (
+        <button
+          className="chat-window__header-btn"
+          onClick={onClearChat}
+          title="Limpiar conversacion actual"
+        >
+          <RotateCcw size={18} />
+        </button>
+      )}
       <button
-        className="chat-window__theme-toggle"
+        className="chat-window__header-btn"
         onClick={toggleTheme}
         title={darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       >

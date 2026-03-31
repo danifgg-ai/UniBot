@@ -246,6 +246,40 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// ── Admin config (persistent via JSON file) ──
+const configPath = path.join(__dirname, '..', 'config', 'admin-config.json');
+
+function readConfig() {
+  try {
+    return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  } catch {
+    return {
+      suggestedQuestions: ['Como solicito vacaciones?', 'Cual es el proceso de aprobacion de creditos?', 'Como reporto un incidente de seguridad?', 'Donde consulto el reglamento interno?'],
+      iconId: 'standard',
+    };
+  }
+}
+
+function writeConfig(config) {
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n', 'utf8');
+}
+
+app.get('/api/config', (req, res) => {
+  res.json(readConfig());
+});
+
+app.post('/api/config', (req, res) => {
+  const current = readConfig();
+  const { suggestedQuestions, iconId } = req.body || {};
+
+  if (suggestedQuestions !== undefined) current.suggestedQuestions = suggestedQuestions;
+  if (iconId !== undefined) current.iconId = iconId;
+
+  writeConfig(current);
+  console.log('[Config] Guardado en', configPath);
+  res.json({ ok: true, config: current });
+});
+
 // ── Health check ──
 app.get('/api/health', (req, res) => {
   res.json({

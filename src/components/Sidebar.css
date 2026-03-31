@@ -128,7 +128,7 @@
   text-overflow: ellipsis;
 }
 
-.sidebar__delete-btn {
+.sidebar__action-btn {
   opacity: 0;
   background: none;
   border: none;
@@ -136,11 +136,16 @@
   cursor: pointer;
   padding: 4px;
   border-radius: 6px;
+  flex-shrink: 0;
   transition: opacity 0.15s, color 0.15s;
 }
 
-.sidebar__session:hover .sidebar__delete-btn {
+.sidebar__session:hover .sidebar__action-btn {
   opacity: 1;
+}
+
+.sidebar__pdf-btn:hover {
+  color: var(--accent);
 }
 
 .sidebar__delete-btn:hover {

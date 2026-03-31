@@ -59,6 +59,14 @@ export function useChatSessions() {
     }));
   }, []);
 
+  const clearSessionMessages = useCallback((sessionId) => {
+    setSessions(prev => prev.map(s =>
+      s.id === sessionId
+        ? { ...s, messages: [], title: 'Nueva conversacion', ociSessionId: undefined, updatedAt: new Date().toISOString() }
+        : s
+    ));
+  }, []);
+
   const updateOciSessionId = useCallback((sessionId, ociSessionId) => {
     setSessions(prev => prev.map(s =>
       s.id === sessionId ? { ...s, ociSessionId } : s
@@ -78,6 +86,7 @@ export function useChatSessions() {
     createSession,
     deleteSession,
     addMessage,
+    clearSessionMessages,
     updateOciSessionId,
     clearAllSessions,
   };

@@ -49,7 +49,7 @@
   text-overflow: ellipsis;
 }
 
-.chat-window__theme-toggle {
+.chat-window__header-btn {
   background: var(--surface-elevated);
   border: 1px solid var(--border);
   color: var(--text-secondary);
@@ -62,10 +62,10 @@
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.chat-window__theme-toggle:hover {
+.chat-window__header-btn:hover {
   background: var(--hover-bg);
-  color: var(--gold-accent);
-  border-color: var(--gold-accent);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* Messages */

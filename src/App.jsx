@@ -1,8 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useChatSessions } from './hooks/useChatSessions';
-import { useSuggestedQuestions } from './hooks/useSuggestedQuestions';
-import { useBotIcon } from './hooks/useBotIcon';
+import { useGlobalConfig } from './hooks/useGlobalConfig';
 import { sendMessageToOracle } from './services/oracleAgent';
 import Sidebar from './components/Sidebar';
 import ChatWindow from './components/ChatWindow';
@@ -18,18 +17,19 @@ function ChatApp() {
     createSession,
     deleteSession,
     addMessage,
+    clearSessionMessages,
     updateOciSessionId,
     clearAllSessions,
   } = useChatSessions();
 
   const {
-    questions: suggestedQuestions,
+    suggestedQuestions,
+    iconId,
     saveQuestions,
-    resetToDefaults,
+    resetQuestions,
+    saveIcon,
     DEFAULT_QUESTIONS,
-  } = useSuggestedQuestions();
-
-  const { iconId, saveIcon } = useBotIcon();
+  } = useGlobalConfig();
 
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -89,6 +89,12 @@ function ChatApp() {
     }
   }, [activeSessionId, sessions, createSession, addMessage, updateOciSessionId]);
 
+  const handleClearChat = useCallback(() => {
+    if (activeSessionId && window.confirm('Limpiar toda la conversacion actual?')) {
+      clearSessionMessages(activeSessionId);
+    }
+  }, [activeSessionId, clearSessionMessages]);
+
   const handleNewSession = () => {
     createSession();
     setSidebarOpen(false);
@@ -101,7 +107,7 @@ function ChatApp() {
         onClearSessions={clearAllSessions}
         suggestedQuestions={suggestedQuestions}
         onSaveQuestions={saveQuestions}
-        onResetQuestions={resetToDefaults}
+        onResetQuestions={resetQuestions}
         defaultQuestions={DEFAULT_QUESTIONS}
         iconId={iconId}
         onSaveIcon={saveIcon}
@@ -124,6 +130,7 @@ function ChatApp() {
       <ChatWindow
         session={activeSession}
         onSendMessage={handleSendMessage}
+        onClearChat={handleClearChat}
         isLoading={isLoading}
         onToggleSidebar={() => setSidebarOpen(true)}
         suggestedQuestions={suggestedQuestions}
