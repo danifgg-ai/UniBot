@@ -157,6 +157,40 @@ async function getOrCreateOciSession(frontendSessionId) {
   return ociSessionId;
 }
 
+// ── Helper: send chat with auto-retry on expired session ──
+async function sendChatWithRetry(message, frontendSessionId) {
+  let ociSessionId = await getOrCreateOciSession(frontendSessionId);
+
+  const chatRequest = {
+    agentEndpointId: AGENT_ENDPOINT_ID,
+    chatDetails: {
+      userMessage: message,
+      shouldStream: false,
+      sessionId: ociSessionId,
+    },
+  };
+
+  try {
+    console.log(`[Chat] Enviando: "${message.slice(0, 60)}..." (ociSession: ${ociSessionId})`);
+    const response = await client.chat(chatRequest);
+    return { chatResult: response.chatResult, ociSessionId };
+  } catch (error) {
+    // 404 during chat = expired/invalid session -> recreate and retry once
+    if (error.statusCode === 404 && frontendSessionId) {
+      console.log(`[Chat] Sesion expirada (404), recreando sesion para ${frontendSessionId}...`);
+      sessionMap.delete(frontendSessionId);
+
+      const newOciSessionId = await getOrCreateOciSession(frontendSessionId);
+      chatRequest.chatDetails.sessionId = newOciSessionId;
+
+      console.log(`[Chat] Reintentando con nueva sesion: ${newOciSessionId}`);
+      const retryResponse = await client.chat(chatRequest);
+      return { chatResult: retryResponse.chatResult, ociSessionId: newOciSessionId };
+    }
+    throw error;
+  }
+}
+
 // ── Chat endpoint ──
 app.post('/api/chat', async (req, res) => {
   try {
@@ -176,24 +210,7 @@ app.post('/api/chat', async (req, res) => {
       return res.status(500).json({ error: 'OCI_AGENT_ENDPOINT_ID no esta configurado en server/.env' });
     }
 
-    // Get or create OCI session (required by the API)
-    const ociSessionId = await getOrCreateOciSession(sessionId);
-
-    // Build chat request
-    const chatDetails = {
-      userMessage: message,
-      shouldStream: false,
-      sessionId: ociSessionId,
-    };
-
-    const chatRequest = {
-      agentEndpointId: AGENT_ENDPOINT_ID,
-      chatDetails,
-    };
-
-    console.log(`[Chat] Enviando: "${message.slice(0, 60)}..." (ociSession: ${ociSessionId})`);
-    const response = await client.chat(chatRequest);
-    const chatResult = response.chatResult;
+    const { chatResult, ociSessionId } = await sendChatWithRetry(message, sessionId);
 
     // Extract text response
     let reply = 'No se obtuvo respuesta del agente.';
